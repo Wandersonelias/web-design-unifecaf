@@ -1,1 +1,1 @@
-alert("Olá mundo!!! " + new Date().toLocaleDateString())
+// alert("Olá mundo!!! " + new Date().toLocaleDateString())
