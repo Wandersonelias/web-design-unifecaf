@@ -4,8 +4,546 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sabor & Arte - Restaurante</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+           /* ============================================================
+       UNIDADE III — AULA 1: CSS TRABALHANDO COM IMAGENS DE FUNDO
+       ============================================================ */
+
+    /* ── background-image + background-size + background-position
+          Aplicado no <header>: imagem de fundo cobrindo toda a área
+          background-size: cover → redimensiona para cobrir o elemento
+          background-position: center → centraliza a imagem          ── */
+    header {
+      background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&h=350&fit=crop');
+      background-size: cover;
+      background-position: center center;
+
+      /* ── background-color como fallback:
+            aparece enquanto a imagem carrega ou se ela falhar       ── */
+      background-color: #1a1a1a;
+
+      /* ── background-repeat: no-repeat → evita que a imagem
+            se repita caso seja menor que o elemento                 ── */
+      background-repeat: no-repeat;
+
+      /* ── background-attachment: fixed → efeito parallax:
+            a imagem fica fixa enquanto o conteúdo rola              ── */
+      background-attachment: fixed;
+
+      color: #f5e6c8;
+      padding: 60px 0 40px;
+      text-align: center;
+
+      /* ── position: relative no header para o ::before ficar restrito a ele ── */
+      position: relative;
+    }
+
+    /* ── background-blend-mode: multiply
+          Combina a imagem com uma camada de cor escura semi-transparente,
+          criando um overlay escuro sobre a foto para melhorar legibilidade ── */
+    header::before {
+      content: '';
+      display: block;
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.45);
+      /* overlay escuro sobre a imagem para melhorar legibilidade do texto */
+    }
+
+    header h1, header p {
+      position: relative; /* garante que o texto fique acima do overlay */
+      z-index: 1;
+    }
+
+    /* ── Seletor de Descendente ──────────────────────────────── */
+    header p {
+      font-style: italic;
+      color: #f5e6c8;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    header h1 {
+      font-size: 48px;
+      color: #ffffff;
+      letter-spacing: 2px;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      background-color: #fdf9f3;
+      color: #2c2c2c;
+      line-height: 1.6;
+      /* position: relative removido do body — estava causando o escurecimento da página */
+    }
+
+    /* ============================================================
+       UNIDADE III — AULA 2: POSICIONAMENTO — FLOAT, FLEX E GRID
+       ============================================================ */
+
+    /* ── 1. DISPLAY: FLEX no <nav>
+          O Flexbox organiza os links em linha, com espaçamento
+          automático entre eles e quebra de linha em telas menores.
+          justify-content: center → centraliza os itens no eixo principal
+          flex-wrap: wrap → permite quebrar em múltiplas linhas          ── */
+    nav {
+      background-color: #2c2c2c;
+      padding: 10px 40px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ── Seletor de Filho Direto ─────────────────────────────── */
+    nav > a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    nav > a:hover {
+      background-color: #e67e22;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    section {
+      padding: 32px 0;
+      border-bottom: 1px solid #e0d5c5;
+    }
+
+    section h2 {
+      font-size: 28px;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+    }
+
+    /* ── 2. BOX MODEL — CSS POSICIONAMENTO DE ELEMENTOS
+          O Box Model é composto por: content + padding + border + margin
+          Aqui demonstramos cada camada no .card                         ── */
+    .card {
+      /* content: o conteúdo interno ocupa toda a largura disponível */
+
+      /* padding: espaço INTERNO entre o conteúdo e a borda */
+      padding: 20px;
+
+      /* border: linha ao redor do padding */
+      border: 5px dashed #e0d5c5;
+
+      /* margin: espaço EXTERNO separando este card do próximo elemento */
+      margin-bottom: 16px;
+
+      /* Propriedades visuais extras */
+      background-color: #ffffff;
+      border-radius: 8px;
+
+      /* box-shadow usa o modelo de caixa para criar sombra */
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.06);
+
+      /* box-sizing: border-box → faz o padding e border serem incluídos
+         no cálculo do width total, tornando o tamanho mais previsível   */
+      box-sizing: border-box;
+    }
+
+    /* ── 3. DISPLAY: GRID — layout da galeria de pratos
+          O Grid cria uma estrutura bidimensional (linhas E colunas).
+          grid-template-columns: repeat(3, 1fr) → 3 colunas de igual tamanho
+          gap: espaçamento entre as células da grade                     ── */
+    .galeria-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    /* ── Cada item da galeria ocupa 1 célula do grid ── */
+    .galeria-grid .galeria-item {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px dashed #e0d5c5;
+      box-sizing: border-box;
+    }
+
+    .galeria-grid .galeria-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .galeria-grid .galeria-item p {
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #555;
+      background: #fff;
+      margin: 0;
+      text-align: center;
+    }
+
+    /* ── 4. FLOAT — demonstrado na seção "Sobre Nós"
+          float: left → a imagem flutua à esquerda e o texto a contorna.
+          Esta foi a técnica mais usada antes do Flexbox e Grid existirem. ── */
+    .sobre-img-float {
+      float: left;
+      margin: 0 20px 16px 0;
+      border-radius: 8px;
+      border: 2px solid #e0d5c5;
+    }
+
+    /* ── clearfix: evita colapso do container quando usa float ── */
+    .clearfix::after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+
+    /* ── 5. DISPLAY: FLEX nos cards do cardápio
+          Os cards ficam lado a lado, com espaçamento igual entre eles.
+          align-items: stretch → todos os cards ficam com a mesma altura ── */
+    .cardapio-flex {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .cardapio-flex .card {
+      /* flex: 1 → cada card cresce igualmente para preencher a linha
+         min-width garante que não fiquem muito estreitos               */
+      flex: 1;
+      min-width: 200p;
+
+    }
+
+    /* ── 6. GRID LAYOUT no rodapé — áreas nomeadas
+          grid-template-areas permite nomear regiões do layout,
+          tornando o código mais legível e semântico                    ── */
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-areas:
+        "endereco horario redes";
+      gap: 24px;
+      padding: 32px;
+      background-color: #1a1a1a;
+      color: #aaa;
+    }
+
+    .footer-endereco { grid-area: endereco; }
+    .footer-horario  { grid-area: horario; }
+    .footer-redes    { grid-area: redes; }
+
+    .footer-grid h4 {
+      color: #f5e6c8;
+      margin-bottom: 10px;
+      font-family: Georgia, serif;
+    }
+
+    .footer-grid a {
+      color: #f5e6c8;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .footer-copy {
+      background-color: #111;
+      color: #666;
+      text-align: center;
+      padding: 12px;
+      font-size: 12px;
+    }
+
+    /* ── background-image na seção de reserva: gradiente como fundo
+          CSS permite usar gradientes como imagem de fundo sem arquivos ── */
+    #reserva {
+      background-image: linear-gradient(135deg, #f4f8ff 0%, #e8f0fe 100%);
+      background-color: #f4f8ff; /* fallback */
+      padding: 32px 20px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+
+    /* ── background na seção sobre: cor sólida de fundo ── */
+    #sobre    { background-color: #fffdf7; }
+    #cardapio { background-color: #fdf9f3; }
+    #contato  { background-color: #f9fdf4; }
+
+    /* ── Seletor de Classe ───────────────────────────────────── */
+    .destaque {
+      color: #c0392b;
+      font-weight: bold;
+    }
+
+    .badge {
+      background-color: #c0392b;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* ── Pseudo-classe :focus para acessibilidade ────────────── */
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: 3px solid #c0392b;
+      border-color: #c0392b;
+    }
+
+    /* ── Pseudo-elemento ::placeholder ──────────────────────── */
+    input::placeholder,
+    textarea::placeholder {
+      color: #aaa;
+      font-style: italic;
+    }
+
+    /* ── Seletor de Atributo ─────────────────────────────────── */
+    input[type="submit"] {
+      background-color: #c0392b;
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #922b21;
+    }
+
+    input[type="reset"] {
+      background-color: #7f8c8d;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    /* ── Seletor de Irmão Adjacente (+) ──────────────────────── */
+    label + input {
+      display: block;
+      width: 90%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      margin-bottom: 16px;
+      background-color: #fff;
+      font-family: Arial, sans-serif;
+    }
     
+    label + select {
+      display: block;
+      width: 90%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      margin-bottom: 16px;
+      background-color: #fff;
+      font-family: Arial, sans-serif;
+    }
+        
+    label + textarea {
+      display: block;
+      width: 90%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      margin-bottom: 16px;
+      background-color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    /* ── Seletor de Grupo ────────────────────────────────────── */
+    h1, h2, h3 {
+      font-family: Georgia, serif;
+    }
+
+    /* ── Tags semânticas — estrutura visual ──────────────────── */
+    aside {
+      background-color: #fff8e7;
+      border-left: 4px solid #f0a500;
+      padding: 16px 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    aside h3 {
+      color: #e67e22;
+      margin-bottom: 8px;
+    }
+
+    article {
+      background-color: #fff;
+      border: 1px solid #e0d5c5;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    /* ── Tabela ──────────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background-color: #fff;
+    }
+
+    th {
+      background-color: #1a1a1a;
+      color: #f5e6c8;
+      padding: 10px 14px;
+      text-align: left;
+      font-family: Arial, sans-serif;
+    }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid #e0d5c5;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fdf9f3;
+    }
+
+    /* ── Listas ──────────────────────────────────────────────── */
+    ul, ol {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    dl dt {
+      font-weight: bold;
+      color: #1a1a1a;
+      margin-top: 10px;
+    }
+
+    dl dd {
+      padding-left: 16px;
+      color: #555;
+    }
+
+    /* ── Blockquote ──────────────────────────────────────────── */
+    blockquote {
+      border-left: 4px solid #c0392b;
+      padding: 14px 20px;
+      background-color: #fff8f8;
+      font-style: italic;
+      color: #555;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+    }
+
+    /* ── Formulário ──────────────────────────────────────────── */
+    .form-group {
+      margin-bottom: 4px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    /* ── FLEX no formulário: campos lado a lado ── */
+    .form-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .radio-group, .checkbox-group {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .radio-group label,
+    .checkbox-group label {
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .form-section-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #c0392b;
+      border-bottom: 1px solid #e0d5c5;
+      padding-bottom: 6px;
+      margin: 20px 0 14px;
+    }
+
+    .form-note {
+      font-size: 12px;
+      color: #888;
+      margin-top: -10px;
+      margin-bottom: 14px;
+    }
+
+    .btn-group {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* ── Endereço ────────────────────────────────────────────── */
+    address {
+      font-style: normal;
+      line-height: 2;
+    }
+
+    address a {
+      color: #c0392b;
+      text-decoration: none;
+    }
+
+    /* ── Imagem header (legado) ──────────────────────────────── */
+    .image-header {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    </style>
   </head>
   <body>
 

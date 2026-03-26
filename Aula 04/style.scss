@@ -1,0 +1,870 @@
+@use "sass:color";
+
+// ================================================================
+// SABOR & ARTE — RESTAURANTE
+// Arquivo: style.scss
+// Unidade IV — Aula 2: Introdução ao CSS SASS
+//
+// COMO COMPILAR ESTE ARQUIVO:
+//   1. Instale o Node.js em https://nodejs.org
+//   2. No terminal, instale o SASS globalmente:
+//   3. npm init -y para Gerar o packge.json
+//        npm install -g sass
+//   4. Compile uma vez:
+//        sass style.scss style.css
+//   5. Ou compile em modo "watch" (recompila ao salvar):
+//        sass --watch style.scss:style.css
+//
+//   No VSCode: instale a extensão "Live Sass Compiler"
+//   e clique em "Watch Sass" na barra inferior.
+// ================================================================
+
+
+// ================================================================
+// UNIDADE IV — AULA 2: VARIÁVEIS SASS ($variavel)
+// ================================================================
+// Variáveis armazenam valores reutilizáveis em todo o projeto.
+// Alterar UMA variável reflete em TODOS os lugares que a usam.
+// Isso é impossível no CSS puro sem escrever cada valor na mão.
+// Sintaxe: $nome-da-variavel: valor;
+// ================================================================
+
+// -- Paleta de cores principal --
+$cor-primaria:      #c0392b;   // vermelho escuro — botões e destaques
+$cor-primaria-dark: #922b21;   // versão mais escura para :hover
+$cor-secundaria:    #e67e22;   // laranja — hover do nav, aside
+$cor-fundo:         #fdf9f3;   // bege claro — fundo da página
+$cor-texto:         #2c2c2c;   // cinza escuro — texto principal
+$cor-borda:         #e0d5c5;   // bege médio — bordas e divisores
+$cor-branca:        #ffffff;
+$cor-cinza-escuro:  #1a1a1a;   // preto suave — header, footer, th
+$cor-cinza-medio:   #2c2c2c;   // nav background
+$cor-texto-suave:   #555;      // textos secundários
+$cor-texto-muted:   #94a3b8;   // textos muito suaves
+
+// -- Cores de destaque --
+$cor-aside-fundo:   #fff8e7;
+$cor-aside-borda:   #f0a500;
+$cor-quote-fundo:   #fff8f8;
+$cor-reserva-ini:   #f4f8ff;
+$cor-reserva-fim:   #e8f0fe;
+
+// -- Tipografia --
+$fonte-texto:       Arial, sans-serif;
+$fonte-titulo:      Georgia, serif;
+$fonte-codigo:      Consolas, 'Courier New', monospace;
+$tamanho-base:      16px;      // 1rem = este valor
+$tamanho-desktop:   17px;      // rem maior em desktops
+
+// -- Espaçamentos padrão --
+$espaco-xs:  0.25rem;   //  4px
+$espaco-sm:  0.5rem;    //  8px
+$espaco-md:  1rem;      // 16px
+$espaco-lg:  1.5rem;    // 24px
+$espaco-xl:  2rem;      // 32px
+$espaco-xxl: 3rem;      // 48px
+
+// -- Bordas e sombras --
+$raio-borda:   8px;
+$raio-pequeno: 4px;
+$sombra-card:  2px 2px 8px rgba(0, 0, 0, 0.06);
+
+// -- Breakpoints (Media Queries) --
+$bp-mobile:    600px;
+$bp-tablet:    768px;
+$bp-desktop:  1024px;
+
+// -- Largura máxima do conteúdo --
+$largura-max: 56.25rem; // 900px
+
+
+// ================================================================
+// UNIDADE IV — AULA 2: MIXINS (@mixin e @include)
+// ================================================================
+// Mixins são blocos de CSS reutilizáveis, como funções.
+// Você define uma vez com @mixin e reutiliza com @include.
+// Podem receber parâmetros (como argumentos de função).
+// ================================================================
+
+// -- Mixin: Flexbox centralizado --
+// Uso: @include flex-center;
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// -- Mixin: Flexbox com parâmetros personalizáveis --
+// Uso: @include flex(row, center, space-between, wrap);
+@mixin flex($direction: row, $align: stretch, $justify: flex-start, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+  flex-wrap: $wrap;
+}
+
+// -- Mixin: Media Query com breakpoint como parâmetro --
+// Uso: @include responde-a(tablet) { ... }
+@mixin responde-a($ponto) {
+  @if $ponto == mobile {
+    @media (min-width: $bp-mobile) { @content; }
+  } @else if $ponto == tablet {
+    @media (min-width: $bp-tablet) { @content; }
+  } @else if $ponto == desktop {
+    @media (min-width: $bp-desktop) { @content; }
+  }
+}
+
+// -- Mixin: Truncar texto com reticências --
+// Uso: @include truncar-texto;
+@mixin truncar-texto {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// -- Mixin: Sombra customizável --
+// Uso: @include sombra(4px, 0.1);
+@mixin sombra($distancia: 8px, $opacidade: 0.06) {
+  box-shadow: 2px 2px $distancia rgba(0, 0, 0, $opacidade);
+}
+
+// -- Mixin: Botão base reutilizável --
+// Uso: @include botao($cor-primaria, $cor-branca);
+@mixin botao($bg: $cor-primaria, $texto: $cor-branca, $padding-v: 0.75rem, $padding-h: 2rem) {
+  background-color: $bg;
+  color: $texto;
+  border: none;
+  padding: $padding-v $padding-h;
+  font-size: $tamanho-base;
+  font-weight: bold;
+  border-radius: $raio-pequeno;
+  cursor: pointer;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+
+  &:hover {
+    // darken() é uma função SASS que escurece uma cor
+    // Estudaremos as funções logo abaixo!
+    //background-color: darken($bg, 10%);
+      background-color: adjust($bg, 10%);
+  }
+}
+
+
+// ================================================================
+// UNIDADE IV — AULA 2: FUNÇÕES SASS
+// ================================================================
+// O SASS tem funções nativas para manipular cores, números e strings.
+// As mais usadas com cores:
+//   darken($cor, %)   → escurece a cor
+//   lighten($cor, %)  → clareia a cor
+//   rgba($cor, alpha) → adiciona transparência
+//   mix($cor1, $cor2) → mistura duas cores
+// ================================================================
+
+// Exemplo: gerando variações de cor a partir da cor primária
+//$cor-primaria-hover:  darken($cor-primaria, 10%);   // #922b21
+//$cor-primaria-clara:  lighten($cor-primaria, 20%);  // versão clara
+//$cor-primaria-alpha:  rgba($cor-primaria, 0.15);     // semi-transparente
+
+
+// ================================================================
+// UNIDADE IV — AULA 2: @EXTEND / HERANÇA
+// ================================================================
+// %placeholder define um estilo base que pode ser herdado.
+// Uso: @extend %nome-do-placeholder;
+// Diferença do mixin: não aceita parâmetros, mas gera CSS mais limpo
+// (agrupa seletores no CSS compilado em vez de duplicar o código).
+// ================================================================
+
+// -- Placeholder: estilo base de card --
+%card-base {
+  background-color: $cor-branca;
+  border: 1px solid $cor-borda;
+  border-radius: $raio-borda;
+  box-sizing: border-box;
+  @include sombra;
+}
+
+// -- Placeholder: reset de lista --
+%lista-reset {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+// -- Placeholder: link sem sublinhado --
+%link-limpo {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+
+// ================================================================
+// UNIDADE IV — AULA 2: ANINHAMENTO (NESTING)
+// ================================================================
+// No SASS você pode aninhar seletores dentro de outros,
+// simulando a estrutura hierárquica do HTML.
+// O & representa o seletor pai no contexto atual.
+//
+// ATENÇÃO: não aninhe mais de 3 níveis — fica difícil de manter!
+// ================================================================
+
+
+// ================================================================
+// ESTILOS GLOBAIS
+// ================================================================
+
+html {
+  font-size: $tamanho-base; // 1rem = 16px
+
+  // Unidade IV — Mixin responde-a: desktop aumenta a fonte base
+  @include responde-a(desktop) {
+    font-size: $tamanho-desktop;
+  }
+}
+
+body {
+  font-family: $fonte-texto;
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: $cor-fundo;
+  color: $cor-texto;
+}
+
+// -- Tipografia responsiva com rem --
+h1, h2, h3 {
+  font-family: $fonte-titulo;
+}
+
+h1 { font-size: 3rem;    }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.25rem; }
+
+// -- Imagens responsivas --
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+// ================================================================
+// HEADER
+// Aninhamento + variáveis + mixin de media query
+// ================================================================
+
+header {
+  // Variáveis usadas diretamente
+  background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&h=350&fit=crop');
+  background-size: cover;
+  background-position: center center;
+  background-color: $cor-cinza-escuro;  // variável como fallback
+  background-repeat: no-repeat;
+  background-attachment: scroll;        // mobile: scroll (sem bug iOS)
+  color: #f5e6c8;
+  padding: $espaco-xl $espaco-md;       // variáveis de espaçamento
+  text-align: center;
+  position: relative;
+
+  // -- Aninhamento: ::before dentro de header --
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 0;
+    // função rgba() do SASS com variável de cor
+    background-color: rgba($cor-cinza-escuro, 0.45);
+  }
+
+  // -- Aninhamento: h1 e p dentro de header --
+  h1, p {
+    position: relative;
+    z-index: 1;
+  }
+
+  h1 {
+    font-size: 1.75rem;   // mobile first: menor no celular
+    color: $cor-branca;
+    letter-spacing: 2px;
+
+    // Mixin responde-a para aumentar no tablet e desktop
+    @include responde-a(mobile)   { font-size: 2.25rem; }
+    @include responde-a(tablet)   { font-size: 2.75rem; }
+    @include responde-a(desktop)  { font-size: 3rem; }
+  }
+
+  p {
+    font-style: italic;
+    color: #f5e6c8;
+    font-size: 0.875rem;
+    letter-spacing: 1px;
+  }
+
+  // Mobile: padding menor
+  @include responde-a(mobile)  {
+    padding: 2.5rem $espaco-lg;
+  }
+
+  @include responde-a(tablet)  {
+    background-attachment: fixed;  // parallax volta no tablet
+    padding: 3rem $espaco-xl;
+  }
+
+  @include responde-a(desktop) {
+    padding: $espaco-xxl 0 2.5rem;
+  }
+}
+
+
+// ================================================================
+// NAVEGAÇÃO
+// Flexbox via mixin + aninhamento para links
+// ================================================================
+
+nav {
+  background-color: $cor-cinza-medio;
+  padding: $espaco-sm $espaco-md;
+  gap: $espaco-sm;
+  // Mixin flex com parâmetros
+  @include flex(row, center, center, wrap);
+
+  // -- Aninhamento: links filhos diretos do nav --
+  // O & representa nav, então nav > a
+  & > a {
+    @extend %link-limpo;         // herança do placeholder
+    color: $cor-branca;
+    font-weight: bold;
+    font-size: 0.8125rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: $raio-pequeno;
+    transition: background-color 0.2s;
+
+    // -- Aninhamento: estado :hover dentro do link --
+    &:hover {
+      background-color: $cor-secundaria;  // variável
+    }
+  }
+
+  @include responde-a(tablet) {
+    padding: 0.625rem 2.5rem;
+    gap: $espaco-lg;
+
+    & > a {
+      font-size: 0.875rem;
+      padding: $espaco-sm $espaco-md;
+    }
+  }
+}
+
+
+// ================================================================
+// MAIN E SEÇÕES — Layout fluido com variáveis
+// ================================================================
+
+main {
+  width: 95%;               // mobile: quase toda a tela
+  max-width: $largura-max;  // variável: trava em 900px
+  margin: 0 auto;
+  padding: 0.75rem;
+
+  @include responde-a(mobile) {
+    width: 90%;
+    padding: $espaco-md;
+  }
+}
+
+section {
+  padding: $espaco-xl 0;
+  border-bottom: 1px solid $cor-borda;  // variável de cor
+
+  h2 {
+    font-size: 1.75rem;
+    color: $cor-cinza-escuro;
+    margin-bottom: $espaco-md;
+  }
+}
+
+// IDs de seção com cores de fundo (variáveis)
+#sobre    { background-color: #fffdf7; }
+#cardapio { background-color: $cor-fundo; }
+#contato  { background-color: #f9fdf4; }
+
+#reserva {
+  background-image: linear-gradient(135deg, $cor-reserva-ini 0%, $cor-reserva-fim 100%);
+  background-color: $cor-reserva-ini;
+  padding: $espaco-xl $espaco-lg;
+  border-radius: $raio-borda;
+  margin-bottom: $espaco-lg;
+}
+
+
+// ================================================================
+// CARDS — @extend + @include + aninhamento
+// ================================================================
+
+.card {
+  @extend %card-base;           // herda o placeholder
+  padding: $espaco-lg;
+  margin-bottom: $espaco-md;
+}
+
+// Flex dos cards do cardápio
+.cardapio-flex {
+  @include flex(column, stretch, flex-start, wrap);
+  gap: $espaco-md;
+  margin-bottom: $espaco-lg;
+
+  // No mobile: empilhados em coluna (já definido acima)
+  // No tablet+: lado a lado
+  @include responde-a(mobile) {
+    flex-direction: row;
+  }
+
+  // -- Aninhamento: .card dentro de .cardapio-flex --
+  .card {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+
+// ================================================================
+// GALERIA — Grid + media queries com mixin
+// ================================================================
+
+.galeria-grid {
+  display: grid;
+  grid-template-columns: 1fr;    // mobile: 1 coluna
+  gap: $espaco-md;
+  margin-top: $espaco-lg;
+
+  @include responde-a(mobile)  { grid-template-columns: repeat(2, 1fr); }
+  @include responde-a(tablet)  { grid-template-columns: repeat(3, 1fr); }
+
+  // -- Aninhamento: .galeria-item dentro de .galeria-grid --
+  .galeria-item {
+    @extend %card-base;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    // -- Aninhamento: p dentro de .galeria-item --
+    p {
+      padding: $espaco-sm 0.75rem;
+      font-size: 0.8125rem;
+      color: $cor-texto-suave;
+      background: $cor-branca;
+      margin: 0;
+      text-align: center;
+    }
+  }
+}
+
+
+// ================================================================
+// FLOAT — Seção "Sobre Nós"
+// ================================================================
+
+.sobre-img-float {
+  float: none;          // mobile: sem float
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 $espaco-md 0;
+  border-radius: $raio-borda;
+  border: 2px solid $cor-borda;
+
+  @include responde-a(tablet) {
+    float: left;
+    width: 40%;
+    max-width: 280px;
+    margin: 0 $espaco-lg $espaco-md 0;
+  }
+}
+
+.clearfix::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+
+// ================================================================
+// FOOTER — Grid com áreas nomeadas + media queries
+// ================================================================
+
+footer {
+
+  // -- .footer-grid: aninhado dentro de footer --
+  .footer-grid {
+    display: grid;
+    // Mobile: 1 coluna, empilhado
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "endereco"
+      "horario"
+      "redes";
+    gap: $espaco-lg;
+    padding: $espaco-lg $espaco-md;
+    background-color: $cor-cinza-escuro;
+    color: #aaa;
+
+    @include responde-a(tablet) {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "endereco horario"
+        "redes    redes";
+      padding: $espaco-xl $espaco-lg;
+    }
+
+    @include responde-a(desktop) {
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-areas: "endereco horario redes";
+      padding: $espaco-xl;
+    }
+
+    h4 {
+      color: #f5e6c8;
+      margin-bottom: 0.625rem;
+      font-family: $fonte-titulo;
+    }
+
+    a {
+      @extend %link-limpo;
+      color: #f5e6c8;
+      display: block;
+      margin-bottom: $espaco-xs;
+
+      &:hover {
+        color: adjust($cor-secundaria, 15%);  // função lighten()
+      }
+    }
+  }
+
+  .footer-endereco { grid-area: endereco; }
+  .footer-horario  { grid-area: horario; }
+  .footer-redes    { grid-area: redes; }
+
+  // -- .footer-copy: aninhado dentro de footer --
+  .footer-copy {
+    background-color: #111;
+    color: #666;
+    text-align: center;
+    padding: 0.75rem;
+    font-size: 0.75rem;
+
+    a {
+      color: #f5e6c8;
+      text-decoration: none;
+    }
+  }
+}
+
+
+// ================================================================
+// TABELA RESPONSIVA
+// ================================================================
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  background-color: $cor-branca;
+
+  // -- Aninhamento: th, td e tr dentro de table --
+  th {
+    background-color: $cor-cinza-escuro;
+    color: #f5e6c8;
+    padding: 0.625rem 0.875rem;
+    text-align: left;
+    font-family: $fonte-texto;
+  }
+
+  td {
+    padding: 0.5625rem 0.875rem;
+    border-bottom: 1px solid $cor-borda;
+  }
+
+  tr {
+    &:nth-child(even) {
+      background-color: $cor-fundo;
+    }
+
+    &:hover {
+      // função lighten para dar feedback visual ao passar o mouse
+      background-color: adjust($cor-borda, 10%);
+    }
+  }
+}
+
+
+// ================================================================
+// ASIDE E BLOCKQUOTE
+// ================================================================
+
+aside {
+  background-color: $cor-aside-fundo;
+  border-left: 4px solid $cor-aside-borda;
+  padding: $espaco-md $espaco-lg;
+  margin: $espaco-lg 0;
+  border-radius: 0 $raio-borda $raio-borda 0;
+
+  // Aninhamento: h3 dentro de aside
+  h3 {
+    color: $cor-secundaria;
+    margin-bottom: $espaco-sm;
+  }
+}
+
+blockquote {
+  border-left: 4px solid $cor-primaria;
+  padding: 0.875rem $espaco-lg;
+  background-color: $cor-quote-fundo;
+  font-style: italic;
+  color: $cor-texto-suave;
+  border-radius: 0 $raio-borda $raio-borda 0;
+  margin: 0.75rem 0;
+}
+
+
+// ================================================================
+// FORMULÁRIO — Mixin de botão + aninhamento
+// ================================================================
+
+.destaque {
+  color: $cor-primaria;
+  font-weight: bold;
+}
+
+// Usando o mixin @botao para gerar os dois botões
+input[type="submit"] {
+  @include botao($cor-primaria, $cor-branca);
+  // darken() já está dentro do mixin no &:hover
+}
+
+input[type="reset"] {
+  @include botao(#7f8c8d, $cor-branca, 0.75rem, 1.5rem);
+  font-size: 0.875rem;
+  margin-left: $espaco-sm;
+
+  @include responde-a(mobile) {
+    margin-left: 0;
+  }
+}
+
+label + input,
+label + select,
+label + textarea {
+  display: block;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: $raio-pequeno * 1.5; // operação aritmética SASS
+  font-size: 0.9375rem;
+  margin-bottom: $espaco-md;
+  background-color: $cor-branca;
+  font-family: $fonte-texto;
+  box-sizing: border-box;
+
+  // Aninhamento: :focus dentro dos campos
+  &:focus {
+    outline: 3px solid $cor-primaria;
+    border-color: $cor-primaria;
+  }
+}
+
+input, textarea, select {
+  &::placeholder {
+    color: #aaa;
+    font-style: italic;
+  }
+}
+
+.form-group {
+  margin-bottom: $espaco-xs;
+
+  // Aninhamento: label dentro de .form-group
+  label {
+    display: block;
+    font-weight: bold;
+    font-size: 0.875rem;
+    color: #333;
+    margin-bottom: $espaco-xs;
+  }
+}
+
+.form-row {
+  @include flex(column, stretch, flex-start, nowrap);
+  gap: 0;
+
+  @include responde-a(mobile) {
+    flex-direction: row;
+    gap: $espaco-md;
+  }
+
+  .form-group {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+.radio-group,
+.checkbox-group {
+  @include flex(row, center, flex-start, wrap);
+  gap: $espaco-lg;
+  margin-bottom: $espaco-md;
+
+  label {
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+}
+
+.form-section-title {
+  font-size: $espaco-md;
+  font-weight: bold;
+  color: $cor-primaria;
+  border-bottom: 1px solid $cor-borda;
+  padding-bottom: 6px;
+  margin: $espaco-lg 0 0.875rem;
+}
+
+.form-note {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: -10px;
+  margin-bottom: 0.875rem;
+}
+
+.btn-group {
+  margin-top: $espaco-lg;
+  @include flex(column, stretch, flex-start, nowrap);
+  gap: 0.75rem;
+
+  @include responde-a(mobile) {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}
+
+
+// ================================================================
+// LISTAS E DEFINIÇÕES
+// ================================================================
+
+ul, ol {
+  padding-left: $espaco-lg;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+dl {
+  dt {
+    font-weight: bold;
+    color: $cor-cinza-escuro;
+    margin-top: 0.625rem;
+  }
+
+  dd {
+    padding-left: $espaco-md;
+    color: $cor-texto-suave;
+  }
+}
+
+address {
+  font-style: normal;
+  line-height: 2;
+
+  a {
+    color: $cor-primaria;
+    text-decoration: none;
+
+    &:hover {
+      color: $cor-primaria-dark;
+      text-decoration: underline;
+    }
+  }
+}
+
+
+// ================================================================
+// UNIDADE IV — AULA 2: @USE E PARTIALS (conceito avançado)
+// ================================================================
+// Em projetos grandes, o SASS permite dividir o arquivo em partes
+// menores chamadas "partials". O nome começa com _ (underscore):
+//
+//   _variaveis.scss   → todas as variáveis
+//   _mixins.scss      → todos os mixins
+//   _base.scss        → estilos globais (html, body, img)
+//   _header.scss      → estilos do header
+//   _nav.scss         → estilos da navegação
+//   _cards.scss       → estilos dos cards
+//   _galeria.scss     → estilos da galeria
+//   _formulario.scss  → estilos do formulário
+//   _footer.scss      → estilos do rodapé
+//   _responsive.scss  → todas as media queries
+//
+// E um arquivo principal que importa tudo:
+//
+//   // style.scss (principal)
+//   @use 'variaveis';
+//   @use 'mixins';
+//   @use 'base';
+//   @use 'header';
+//   @use 'nav';
+//   ... etc
+//
+// O SASS compila tudo em um único style.css otimizado!
+// ================================================================
+
+
+// ================================================================
+// MEDIA QUERY DE IMPRESSÃO (@media print)
+// ================================================================
+
+@media print {
+  nav, .btn-group, footer, aside { display: none; }
+
+  header {
+    background: none;
+    color: #000;
+    padding: $espaco-md 0;
+
+    &::before { display: none; }
+
+    h1 {
+      color: #000;
+      font-size: 1.5rem;
+    }
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 12pt;
+  }
+
+  main {
+    width: 100%;
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- ============================================================
+         UNIDADE IV — AULA 1: VIEWPORT META TAG
+         Sem esta tag, dispositivos móveis renderizam a página
+         no tamanho desktop e depois encolhem tudo, quebrando o layout.
+         width=device-width → usa a largura real do dispositivo
+         initial-scale=1.0  → nenhum zoom aplicado ao carregar
+         ============================================================ -->
+    <meta name="viewport" content="width=device-width, initial-scale=2.0" />
+
+    <title>Sabor & Arte - Restaurante</title>
+
+    <!-- ============================================================
+         UNIDADE IV — AULA 2: CSS EXTERNO VIA SASS
+         O arquivo style.css foi gerado pelo SASS compilando style.scss.
+         Separar HTML e CSS é uma das boas práticas do desenvolvimento web:
+           - HTML cuida da estrutura
+           - CSS (compilado do SCSS) cuida de toda a aparência
+         ============================================================ -->
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+
+    <!-- ============================================================
+         HEADER — background-image CSS (Unidade III)
+         + padding em rem (Unidade IV: unidades relativas)
+         ============================================================ -->
+    <header>
+      <h1>🍽️ Sabor &amp; Arte</h1>
+      <p><em>O melhor da gastronomia brasileira em um só lugar</em></p>
+    </header>
+
+    <!-- ============================================================
+         NAV — Flexbox (Unidade III) + padding/gap em rem (Unidade IV)
+         ============================================================ -->
+    <nav>
+      <a href="#sobre">Sobre Nós</a>
+      <a href="#cardapio">Cardápio</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#reserva">Reservas</a>
+      <a href="#contato">Contato</a>
+    </nav>
+
+    <main>
+
+      <!-- ============================================================
+           SOBRE NÓS
+           Float (Unidade III) + imagem responsiva com max-width:100%
+           No mobile: .sobre-img-float vira display:block (sem float)
+           No tablet+: float:left volta — definido nas media queries
+           ============================================================ -->
+      <section id="sobre">
+        <h2>📖 Sobre Nós</h2>
+
+        <div class="clearfix">
+
+          <!-- ── IMAGEM RESPONSIVA (Unidade IV — Aula 1)
+                max-width: 100% + height: auto aplicados globalmente
+                no seletor img {}, garantindo que nunca quebre o layout ── -->
+          <img
+            class="sobre-img-float"
+            src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=280&h=200&fit=crop"
+            alt="Chef preparando prato no restaurante"
+            width="280"
+            height="200"
+          />
+
+          <p>
+            Fundado em <strong>2010</strong>, o <strong>Sabor &amp; Arte</strong> é um
+            restaurante familiar dedicado a trazer o melhor da culinária brasileira
+            para a sua mesa. Nossa equipe de chefs usa apenas ingredientes
+            <mark>frescos e selecionados</mark>, garantindo uma experiência
+            <em>inesquecível</em> a cada visita.
+          </p>
+          <p>
+            Somos reconhecidos pelo nosso compromisso com a qualidade e pelo ambiente
+            aconchegante que criamos para nossos clientes. Venha nos visitar e descubra
+            por que somos o restaurante favorito da cidade!
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           CARDÁPIO — Flex com cards (Unidade III)
+           No mobile: flex-direction:column (empilha os cards)
+           No tablet+: flex-direction:row (lado a lado)
+           ============================================================ -->
+      <section id="cardapio">
+        <h2>🍽 Cardápio</h2>
+
+        <!-- .cardapio-flex: flex-direction muda via media query -->
+        <div class="cardapio-flex">
+
+          <div class="card">
+            <h3>🥗 Entradas</h3>
+            <ul>
+              <li>Caldo de Feijão com torresmo — <strong>R$ 18,00</strong></li>
+              <li>Bolinho de Bacalhau (6 un.) — <strong>R$ 35,00</strong></li>
+              <li>Bruschetta de tomate — <strong>R$ 22,00</strong></li>
+              <li>Carpaccio de carne — <strong>R$ 42,00</strong></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>🍖 Pratos Principais</h3>
+            <ol>
+              <li>Filé Mignon ao molho madeira — <strong>R$ 89,00</strong></li>
+              <li>Frango grelhado com legumes — <strong>R$ 65,00</strong></li>
+              <li>Moqueca de camarão — <strong>R$ 95,00</strong></li>
+              <li>Risoto de funghi — <strong>R$ 72,00</strong></li>
+              <li>Picanha na brasa — <strong>R$ 98,00</strong></li>
+            </ol>
+          </div>
+
+          <div class="card">
+            <h3>🍮 Sobremesas &amp; Bebidas</h3>
+            <ul>
+              <li>Pudim de leite — <strong>R$ 18,00</strong></li>
+              <li>Mousse de chocolate — <strong>R$ 22,00</strong></li>
+              <li>Sorvete artesanal — <strong>R$ 20,00</strong></li>
+            </ul>
+            <dl>
+              <dt>Sucos Naturais</dt>
+              <dd>Laranja, Limão, Maracujá — R$ 12,00</dd>
+              <dt>Cervejas Artesanais</dt>
+              <dd>IPA, Weiss, Amber Ale — R$ 18–22</dd>
+            </dl>
+          </div>
+
+        </div>
+
+        <aside>
+          <h3>📌 Dica do Chef</h3>
+          <p>Peça nossa <strong>moqueca de camarão</strong> — o prato mais pedido da casa! 🦐</p>
+        </aside>
+
+      </section>
+
+      <!-- ============================================================
+           TABELA — envolvida em .table-wrapper para rolar no mobile
+           Unidade IV: overflow-x:auto permite scroll horizontal
+           em telas menores sem quebrar a tabela
+           ============================================================ -->
+      <section>
+        <h2>🕐 Horários de Funcionamento</h2>
+
+        <!-- .table-wrapper: overflow-x:auto aplicado no CSS mobile ── -->
+        <div class="table-wrapper">
+          <table>
+            <tr>
+              <th>Dia da Semana</th>
+              <th colspan="2">Horário de Atendimento</th>
+            </tr>
+            <tr>
+              <td>Segunda-feira</td>
+              <td>Fechado</td>
+              <td>Fechado</td>
+            </tr>
+            <tr>
+              <td>Terça a Quinta</td>
+              <td>11h30 às 15h00</td>
+              <td>18h30 às 22h30</td>
+            </tr>
+            <tr>
+              <td>Sexta-feira</td>
+              <td>11h30 às 15h00</td>
+              <td>18h30 às 23h30</td>
+            </tr>
+            <tr>
+              <td>Sábado</td>
+              <td>12h00 às 16h00</td>
+              <td>18h30 às 23h30</td>
+            </tr>
+            <tr>
+              <td>Domingo e Feriados</td>
+              <td>12h00 às 17h00</td>
+              <td>Fechado</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           GALERIA — CSS Grid (Unidade III)
+           + responsividade via media queries (Unidade IV):
+             Mobile  → 1 coluna
+             600px+  → 2 colunas
+             768px+  → 3 colunas
+           ============================================================ -->
+      <section id="galeria">
+        <h2>📸 Galeria de Pratos</h2>
+        <p>Confira alguns dos nossos pratos mais pedidos:</p>
+
+        <!-- As imagens dentro do grid já herdam max-width:100%
+             do seletor global img {}, então se adaptam sozinhas ── -->
+        <div class="galeria-grid">
+
+          <div class="galeria-item">
+            <img
+              src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop"
+              alt="Salada colorida e fresca"
+            />
+            <p>Salada da Estação</p>
+          </div>
+
+          <div class="galeria-item">
+            <img
+              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop"
+              alt="Filé mignon com acompanhamentos"
+            />
+            <p>Filé Mignon ao Molho Madeira</p>
+          </div>
+
+          <div class="galeria-item">
+            <img
+              src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop"
+              alt="Pizza artesanal"
+            />
+            <p>Pizza Artesanal à Lenha</p>
+          </div>
+
+          <div class="galeria-item">
+            <img
+              src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop"
+              alt="Ambiente do restaurante"
+            />
+            <p>Nosso Ambiente</p>
+          </div>
+
+          <div class="galeria-item">
+            <img
+              src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=400&h=300&fit=crop"
+              alt="Sobremesa especial"
+            />
+            <p>Sobremesa Especial</p>
+          </div>
+
+          <div class="galeria-item">
+            <img
+              src="https://images.unsplash.com/photo-1559847844-5315695dadae?w=400&h=300&fit=crop"
+              alt="Moqueca de camarão"
+            />
+            <p>Moqueca de Camarão</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ============================================================
+           RESERVA — Formulário com Flex + media queries
+           No mobile: campos empilham (.form-row → flex-direction:column)
+           No tablet+: campos ficam lado a lado (.form-row → flex-direction:row)
+           ============================================================ -->
+      <section id="reserva">
+        <h2>📋 Faça sua Reserva Online</h2>
+        <p>Preencha o formulário abaixo para garantir sua mesa. Campos marcados com <span class="destaque">*</span> são obrigatórios.</p>
+
+        <form action="processar_reserva.php" method="POST">
+
+          <p class="form-section-title">👤 Dados Pessoais</p>
+
+          <!-- No mobile: empilha. No 600px+: lado a lado -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome">Nome Completo <span class="destaque">*</span></label>
+              <input type="text" id="nome" name="nome"
+                placeholder="Digite seu nome completo"
+                required minlength="3" maxlength="80">
+            </div>
+            <div class="form-group">
+              <label for="email">E-mail <span class="destaque">*</span></label>
+              <input type="email" id="email" name="email"
+                placeholder="seuemail@exemplo.com" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="telefone">Telefone <span class="destaque">*</span></label>
+              <input type="tel" id="telefone" name="telefone"
+                placeholder="(11) 99999-9999"
+                pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" required>
+            </div>
+            <div class="form-group">
+              <label for="data">Data desejada <span class="destaque">*</span></label>
+              <input type="date" id="data" name="data" required>
+            </div>
+          </div>
+
+          <p class="form-section-title">📅 Detalhes da Reserva</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pessoas">Número de pessoas <span class="destaque">*</span></label>
+              <input type="number" id="pessoas" name="pessoas"
+                min="1" max="20" placeholder="Ex: 4" required>
+            </div>
+            <div class="form-group">
+              <label for="turno">Turno <span class="destaque">*</span></label>
+              <select id="turno" name="turno" required>
+                <option value="">— Selecione o turno —</option>
+                <option value="almoco">Almoço (11h30–15h00)</option>
+                <option value="jantar">Jantar (18h30–23h30)</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="form-section-title">🍽️ Preferências Alimentares</p>
+
+          <p style="font-weight:bold; font-size:0.875rem; margin-bottom:8px;">Tipo de dieta: <span class="destaque">*</span></p>
+          <div class="radio-group">
+            <label><input type="radio" name="dieta" value="sem_restricao" checked> Sem restrição</label>
+            <label><input type="radio" name="dieta" value="vegetariano"> Vegetariano</label>
+            <label><input type="radio" name="dieta" value="vegano"> Vegano</label>
+            <label><input type="radio" name="dieta" value="sem_gluten"> Sem glúten</label>
+          </div>
+
+          <p style="font-weight:bold; font-size:0.875rem; margin-bottom:8px;">Extras desejados:</p>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="extras" value="bolo"> 🎂 Bolo de aniversário</label>
+            <label><input type="checkbox" name="extras" value="decoracao"> 🌸 Decoração especial</label>
+            <label><input type="checkbox" name="extras" value="champagne"> 🥂 Champagne de boas-vindas</label>
+          </div>
+
+          <div class="form-group">
+            <label for="observacoes">Observações / pedidos especiais</label>
+            <textarea id="observacoes" name="observacoes"
+              rows="4"
+              placeholder="Informe alergias, aniversários, acessibilidade..."
+              maxlength="500"
+              style="display:block; width:100%; padding:0.625rem 0.75rem; border:1px solid #ccc; border-radius:6px; font-family:Arial,sans-serif; font-size:0.9375rem; resize:vertical; margin-bottom:1rem; box-sizing:border-box;"></textarea>
+            <p class="form-note">Máximo de 500 caracteres.</p>
+          </div>
+
+          <div style="margin-bottom:1rem;">
+            <label style="display:flex; align-items:center; gap:8px; font-weight:normal; cursor:pointer;">
+              <input type="checkbox" name="aceitar_termos" value="sim" required>
+              Li e concordo com os <a href="termos.html" target="_blank" style="color:#c0392b;">Termos e Condições</a>
+              de reserva. <span class="destaque">*</span>
+            </label>
+          </div>
+
+          <!-- .btn-group: empilha no mobile, lado a lado no tablet+ -->
+          <div class="btn-group">
+            <input type="submit" value="✅ Confirmar Reserva">
+            <input type="reset" value="🔄 Limpar Formulário">
+          </div>
+
+        </form>
+
+        <aside style="margin-top:1.5rem;">
+          <h3>📌 Como chegamos até você</h3>
+          <p>Após o envio, nossa equipe entrará em contato em até <strong>2 horas</strong> para confirmar sua reserva.</p>
+        </aside>
+
+        <h2>O que nossos clientes dizem</h2>
+        <blockquote>
+          A moqueca de camarão é simplesmente incrível! O atendimento é impecável e
+          o ambiente é muito aconchegante. Recomendo a todos que amam boa comida!
+        </blockquote>
+        <p>— <cite>Maria Silva</cite>, cliente desde 2018</p>
+
+      </section>
+
+      <!-- Contato -->
+      <section id="contato">
+        <h2>📍 Contato</h2>
+        <address>
+          <strong>Restaurante Sabor &amp; Arte</strong><br>
+          Rua das Flores, 456 - Jardim Primavera<br>
+          São Paulo - SP, CEP 01234-567<br><br>
+          <a href="tel:+5511987654321">(11) 91235-6123</a><br>
+          <a href="https://wa.me/5511987654321">WhatsApp (11) 91235-6123</a><br>
+          <a href="mailto:contato@saborearte.com.br">contato@saborearte.com.br</a>
+        </address>
+
+        <h3>Links Úteis</h3>
+        <ul>
+          <li><a href="https://www.google.com/maps" target="_blank">📍 Ver no Google Maps</a></li>
+          <li><a href="#" download>📥 Baixar Cardápio Completo (PDF)</a></li>
+          <li><a href="https://www.instagram.com" target="_blank">📷 Siga-nos no Instagram</a></li>
+        </ul>
+      </section>
+
+    </main>
+
+    <!-- ============================================================
+         FOOTER — CSS Grid com áreas nomeadas (Unidade III)
+         + responsividade via media queries (Unidade IV):
+           Mobile  → 1 coluna (empilha tudo)
+           768px+  → 2 colunas
+           1024px+ → 3 colunas (layout original)
+         ============================================================ -->
+    <footer>
+
+      <div class="footer-grid">
+
+        <div class="footer-endereco">
+          <h4>📍 Endereço</h4>
+          <p>Rua das Flores, 456<br>Jardim Primavera<br>São Paulo - SP</p>
+          <a href="tel:+5511987654321">(11) 91235-6123</a>
+        </div>
+
+        <div class="footer-horario">
+          <h4>🕐 Horários</h4>
+          <p>Ter–Qui: 11h30–22h30</p>
+          <p>Sex: 11h30–23h30</p>
+          <p>Sáb: 12h00–23h30</p>
+          <p>Dom: 12h00–17h00</p>
+          <p>Seg: Fechado</p>
+        </div>
+
+        <div class="footer-redes">
+          <h4>🌐 Redes Sociais</h4>
+          <a href="https://www.instagram.com" target="_blank">📷 Instagram</a>
+          <a href="https://www.facebook.com" target="_blank">👍 Facebook</a>
+          <a href="https://www.google.com/maps" target="_blank">📍 Google Maps</a>
+        </div>
+
+      </div>
+
+      <div class="footer-copy">
+        <small>
+          &copy; 2026 Sabor &amp; Arte — Todos os direitos reservados. |
+          <a href="#sobre" style="color:#f5e6c8;">Voltar ao topo</a>
+        </small>
+      </div>
+
+    </footer>
+
+  </body>
+</html>
